@@ -7,9 +7,9 @@ As part of the AngelHack Vietnam 2019 challenge, our team created...
 
 ### Prerequisites
 
-Markup : 1. Python 3.6 and an appropriate version of Anaconda
-         2. Additional libraries: 
-            1.    
+1. Python 3.6 and an appropriate version of Anaconda
+2. Additional libraries: 
+    *     
 
 ```
 Python 3.6.5 :: Anaconda 5.2.0
