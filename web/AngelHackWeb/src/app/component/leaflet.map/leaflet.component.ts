@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { latLng, tileLayer, Layer, marker, geoJSON } from 'leaflet';
-import { CustomerService } from '../../service/customer.service';
-import { LeafletLayersFECreditModel } from './layer.model';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { latLng, tileLayer, Layer, marker, icon, LayerGroup, Marker } from 'leaflet';
+import { CustomerService } from '../../service/customer/customer.service';
+import { SalerSuggestionService } from '../../service/salerSuggestion/saler.suggestion.service';
+import { PotentialCustomerModel } from './potential.customer.model';
 
 @Component({
   selector: 'leaflet-root',
@@ -9,103 +10,79 @@ import { LeafletLayersFECreditModel } from './layer.model';
   styleUrls: ['./leaflet.component.css']
 })
 export class LeafletComponent {
+  show: boolean = true
 
-  FELocation = {
-		id: 'geoJSON',
-		name: 'Geo JSON Polygon',
-		enabled: true,
-		layer: geoJSON(
-			({
-				type: 'Polygon',
-				coordinates: [[
-          [
-            106.6775894165039,
-            10.796379859206972
-          ],
-          [
-            106.67226791381836,
-            10.7962112363456
-          ],
-          [
-            106.6717529296875,
-            10.784070141719273
-          ],
-          [
-            106.6775894165039,
-            10.796379859206972
-          ]
-				]]
-			}) as any,
-			{ style: () => ({ color: '#ff7800' })})
+  customerObjs = [];
+  selectedCustomerObj: PotentialCustomerModel;
+  userTiers = this.customerService.getListUserTier1();
+  customerMarkers = [];
+  customerLayerGroup = new LayerGroup();
+
+  salerSuggestionObjs = [];
+  selectedSalerSuggestionObj;
+  listSalerFromService = this.salerSuggestionService.getListSalerTier1();
+  salerMarksers = [];
+  salerLayerGroup = new LayerGroup();
+
+
+  constructor(private salerSuggestionService: SalerSuggestionService, private customerService: CustomerService, private changeDetector: ChangeDetectorRef) {
+    this.initCustomerMarkers();
   }
-  userTier1 = this.customerService.getListUserTier1();
-  CustomerLocation = this.extractCustomerLocation('Customer Location', 'Customer Location', this.userTier1);
-
-  constructor(private customerService: CustomerService) {
-    console.log(this.FELocation);
-    console.log(this.CustomerLocation);
-  }
-
-	// Form model object
-	model = new LeafletLayersFECreditModel(
-		[ this.FELocation, this.CustomerLocation ]
-	);
-
-
-	layers: Layer[];
-
-	layersControl = {
-		overlays: {
-			FELocation: this.FELocation.layer,
-			CustomerLocation: this.CustomerLocation.layer
-		}
-  };
-  
 
 
   options = {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
-      })
+      }),
+      this.customerLayerGroup
     ],
     zoom: 10,
     center: latLng([10.714586690981509, 106.67381286621094])
   };
-
-  GEOJSON_FORMAT = {
-    "type": "FeatureCollection",
-    "features": []
-  };
-  FEATURE_FORMAT = {
-    "type": "Feature",
-    "properties": {},
-    "geometry": {}
-  };
-  POINT_FORMAT = {
-    "type": "Point",
-    "coordinates": []
-  };
-
-  extractCustomerLocation(id, name, userTiers){
-    var layer = {
-      id: id,
-      name: name,
-      enabled: true,
-      layer: geoJSON()
-    };
-
-    return layer;
+  layersControl = {
+    overlays: {
+      "Potential Customer": this.customerLayerGroup,
+    }
   }
 
-	apply() {
-		// Get all the active overlay layers
-		const newLayers = this.model.overlayLayers
-			.filter((l: any) => l.enabled)
-			.map((l: any) => l.layer);
 
-		this.layers = newLayers;
+  initCustomerMarkers() {
+    var i = 0;
+    this.userTiers.forEach(userTier => {
+      var customerObj = this.createCustomerMarker(userTier);
+      this.customerObjs.push(customerObj);
+      var customerMarker = customerObj.marker;
+      customerMarker.addTo(this.customerLayerGroup);
+      i++;
+    });
+  }
 
-		return false;
-	}
+
+  private createCustomerMarker(userTier) {
+    var customerMarker = {
+      customer: userTier,
+      marker: marker([userTier.workingLocation.coordinates[0], userTier.workingLocation.coordinates[1]], {
+        icon: icon({
+          iconSize: [25, 31],
+          iconAnchor: [13, 31],
+          iconUrl: 'assets/marker_customer.png'
+        })
+      })
+    };
+    customerMarker.marker.on('click', this.customerMarkerClick, this)
+    return customerMarker;
+  }
+  private customerMarkerClick(event){
+    var latlngOfMarkerOnClick = event.latlng;
+    this.customerObjs.forEach(customerObj => {
+      var customerLatLng = customerObj.marker.getLatLng();
+      if(latlngOfMarkerOnClick.lat == customerLatLng.lat && latlngOfMarkerOnClick.lng == customerLatLng.lng) {
+        this.selectedCustomerObj = customerObj.customer;
+
+        this.changeDetector.detectChanges();
+        console.log(customerObj);
+      }
+    });
+  }
 }
