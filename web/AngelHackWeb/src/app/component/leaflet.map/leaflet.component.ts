@@ -54,6 +54,8 @@ export class LeafletComponent {
       this.customerObjs.push(customerObj);
       var customerMarker = customerObj.marker;
       customerMarker.addTo(this.customerLayerGroup);
+      console.log(i);
+      console.log(customerObj);
       i++;
     });
   }

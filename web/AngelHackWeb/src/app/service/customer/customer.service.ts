@@ -12,13 +12,13 @@ export class CustomerService {
   }
 
   getListUserTier1(): PotentialCustomerModel[] {
-    return [this.userQuy, this.userJulia];
+    return [this.userQuy, this.userUyen, this.userKhoa, this.userDuc];
   }
-
   userQuy = {
     "id": "00001",
     "fullname": "Ha Kim Quy",
     "SSID": "214536754",
+    "income": 8000000,
     "email": "changcodon@gmail.com",
     "age": 22,
     "isMale": true,
@@ -26,42 +26,104 @@ export class CustomerService {
     "workingAddress": "772 Điện Biên Phủ, Vinhomes Tân Cảng, Bình Thạnh, Hồ Chí Minh",
     "workingLocation": {
       type: "Point",
-      coordinates: [10.795058, 106.722083]
+      coordinates: [10.795305, 106.721751]
     },
     "suggestCustomerNeed": ["Smartphone", "Motorbyke", "Laptop"],
     "career": "IT",
     "homeAddress": "18 Cay Tram, Go Vap, Tp HCM",
     "homeLocation": {
       type: "Point",
-      coordinates: [10.842697, 106.656181]
+      coordinates: [10.842650, 106.656131]
     },
     "socialNetwork": {
       "Facebook": "https://www.facebook.com/hakim.quy"
-    }
+    },
+    "feCredit": []
   };
-  userJulia = {
-    "id": "00001",
-    "fullname": "Jullia Tran",
-    "SSID": "211028518",
+  userUyen = {
+    "id": "00002",
+    "fullname": "Trần Uyên",
+    "SSID": "211254354",
+    "income": 9000000,
     "email": "nangcodon@gmail.com",
-    "age": 24,
+    "age": 22,
     "isMale": false,
     "phoneNumber": "0163664250",
     "workingAddress": "Landmark 81, Tp HCM",
     "workingLocation": {
       type: "Point",
-      coordinates: [10.725058, 106.722083]
+      coordinates: [10.795058, 106.722083]
     },
-    "suggestCustomerNeed": ["Smartphone", "Laptop"],
+    "suggestCustomerNeed": ["Smartphone", "Motorbyke", "Laptop"],
     "career": "IT",
     "homeAddress": "38 Le Tan Quoc, Tan Binh, Tp HCM",
     "homeLocation": {
       type: "Point",
-      coordinates: [10.804528, 106.638627]
+      coordinates: [10.842697, 106.656181]
     },
     "socialNetwork": {
-      "Facebook": "https://www.facebook.com/jullia.tran"
-    }
+      "Facebook": "https://www.facebook.com/hakim.quy"
+    },
+    "feCredit": [
+      {
+        "name": "Iphone X",
+        "type": "smartphone",
+        "price": "25000000",
+        "yearRelease": 2017
+      }
+    ]
+  };
+  userKhoa = {
+    "id": "00003",
+    "fullname": "Phạm Khoa",
+    "SSID": "211254354",
+    "income": 25000000,
+    "email": "changdeptrai@gmail.com",
+    "age": 22,
+    "isMale": false,
+    "phoneNumber": "0163664250",
+    "workingAddress": "Etown2, Tan Binh, Tp HCM",
+    "workingLocation": {
+      type: "Point",
+      coordinates: [10.802416, 106.639503]
+    },
+    "suggestCustomerNeed": ["Motorbyke", "Smartphone"],
+    "career": "Sale",
+    "homeAddress": "38 Le Tan Quoc, Tan Binh, Tp HCM",
+    "homeLocation": {
+      type: "Point",
+      coordinates: [10.842697, 106.656181]
+    },
+    "socialNetwork": {
+      "Facebook": "https://www.facebook.com/hakim.quy"
+    },
+    "feCredit": []
+  };
+  userDuc = {
+    "id": "00004",
+    "fullname": "Ngô Minh Đức",
+    "SSID": "211254354",
+    "income": 18000000,
+    "email": "changkute@gmail.com",
+    "age": 22,
+    "isMale": false,
+    "phoneNumber": "0163664250",
+    "workingAddress": "Techcombank Tan Cang, Tp HCM",
+    "workingLocation": {
+      type: "Point",
+      coordinates: [10.793650, 106.721323]
+    },
+    "suggestCustomerNeed": ["Motorbyke", "Smartphone"],
+    "career": "Sale",
+    "homeAddress": "38 Le Tan Quoc, Tan Binh, Tp HCM",
+    "homeLocation": {
+      type: "Point",
+      coordinates: [10.842697, 106.656181]
+    },
+    "socialNetwork": {
+      "Facebook": "https://www.facebook.com/hakim.quy"
+    },
+    "feCredit": []
   };
 
 

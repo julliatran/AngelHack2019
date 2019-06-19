@@ -1,1 +1,3 @@
 .DS_Store
+web/AngelHackServer/node_modules/*
+web/AngelHackWeb/node_modules/*
