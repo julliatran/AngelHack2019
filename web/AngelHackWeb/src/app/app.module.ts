@@ -10,6 +10,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
 
 import {HttpModule} from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import {HttpModule} from '@angular/http';
   ],
   imports: [
     HttpModule,
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     LeafletModule.forRoot(),

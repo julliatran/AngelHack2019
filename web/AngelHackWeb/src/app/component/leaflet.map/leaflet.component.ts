@@ -1,5 +1,5 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
-import { latLng, tileLayer, Layer, marker, icon, LayerGroup, Marker } from 'leaflet';
+import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
+import { latLng, tileLayer, Layer, marker, icon, LayerGroup, Marker, MarkerClusterGroup } from 'leaflet';
 import { CustomerService } from '../../service/customer/customer.service';
 import { SalerSuggestionService } from '../../service/salerSuggestion/saler.suggestion.service';
 import { PotentialCustomerModel } from './potential.customer.model';
@@ -13,55 +13,82 @@ export class LeafletComponent {
   show: boolean = true
 
   customerObjs = [];
-  selectedCustomerObj: PotentialCustomerModel;
-  userTiers = this.customerService.getListUserTier1();
+  selectedCustomerObj;
+  userTiers;
   customerMarkers = [];
   customerLayerGroup = new LayerGroup();
+  markerClusterGroup = new MarkerClusterGroup();
+
 
   salerSuggestionObjs = [];
   selectedSalerSuggestionObj;
   listSalerFromService = this.salerSuggestionService.getListSalerTier1();
   salerMarksers = [];
   salerLayerGroup = new LayerGroup();
+  options;
+  test = true;
+  constructor(private salerSuggestionService: SalerSuggestionService, private customerService: CustomerService, private changeDetector: ChangeDetectorRef, private ngZone: NgZone) {
+    // this.customerService.getListUserTier2().subscribe(res => {
+    //   this.userTiers = res.json();
+    //   console.log(this.userTiers);
+    //   this.initCustomerMarkers();
 
-
-  constructor(private salerSuggestionService: SalerSuggestionService, private customerService: CustomerService, private changeDetector: ChangeDetectorRef) {
+    //   this.changeDetector.detectChanges();
+    // });
+    this.options = this.defaultMap;
+    this.userTiers = this.customerService.getListUserTIer2Sample();
+    // this.userTiers = [];
     this.initCustomerMarkers();
-  }
 
+    // setTimeout(() => {
+    //   var marker = new Marker([10.814416, 106.656928], {
+    //     icon: icon({
+    //       iconSize: [25, 31],
+    //       iconAnchor: [13, 31],
+    //       iconUrl: 'assets/marker_customer.png'
+    //     })
+    //   })
+    //   marker.addTo(this.markerClusterGroup);
+      
+    //   this.markerClusterGroup.addLayer(marker);
+    //   this.changeDetector.detectChanges();
+    //   console.log("-----------------");
+    // }, 3000);
 
-  options = {
-    layers: [
-      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }),
-      this.customerLayerGroup
-    ],
-    zoom: 10,
-    center: latLng([10.714586690981509, 106.67381286621094])
-  };
-  layersControl = {
-    overlays: {
-      "Potential Customer": this.customerLayerGroup,
-    }
+    setTimeout(() => this.ngZone.run(() => {
+      this.test = false;
+      var marker = new Marker([10.814416, 106.656928], {
+        icon: icon({
+          iconSize: [25, 31],
+          iconAnchor: [13, 31],
+          iconUrl: 'assets/marker_customer.png'
+        })
+      })
+      this.options = this.defaultMap;
+      
+      this.markerClusterGroup.addLayer(marker);
+      this.changeDetector.detectChanges();
+      this.test = true;
+      console.log("-----------------");
+    }), 3000);
   }
 
 
   initCustomerMarkers() {
-    var i = 0;
-    this.userTiers.forEach(userTier => {
-      var customerObj = this.createCustomerMarker(userTier);
-      this.customerObjs.push(customerObj);
-      var customerMarker = customerObj.marker;
-      customerMarker.addTo(this.customerLayerGroup);
-      console.log(i);
-      console.log(customerObj);
-      i++;
-    });
+    if(this.userTiers) {
+      this.userTiers.forEach(userTier => {
+        var customerObj = this.createCustomerMarker(userTier);
+        this.customerObjs.push(customerObj);
+        var customerMarker = customerObj.marker;
+        customerMarker.addTo(this.customerLayerGroup);
+      });
+    }
+    this.markerClusterGroup.addLayer(this.customerLayerGroup);
   }
 
 
   private createCustomerMarker(userTier) {
+    console.log(userTier.workingLocation.coordinates);
     var customerMarker = {
       customer: userTier,
       marker: marker([userTier.workingLocation.coordinates[0], userTier.workingLocation.coordinates[1]], {
@@ -72,14 +99,14 @@ export class LeafletComponent {
         })
       })
     };
-    customerMarker.marker.on('click', this.customerMarkerClick, this)
+    customerMarker.marker.on('click', this.customerMarkerClick, this);
     return customerMarker;
   }
-  private customerMarkerClick(event){
+  private customerMarkerClick(event) {
     var latlngOfMarkerOnClick = event.latlng;
     this.customerObjs.forEach(customerObj => {
       var customerLatLng = customerObj.marker.getLatLng();
-      if(latlngOfMarkerOnClick.lat == customerLatLng.lat && latlngOfMarkerOnClick.lng == customerLatLng.lng) {
+      if (latlngOfMarkerOnClick.lat == customerLatLng.lat && latlngOfMarkerOnClick.lng == customerLatLng.lng) {
         this.selectedCustomerObj = customerObj.customer;
 
         this.changeDetector.detectChanges();
@@ -87,4 +114,15 @@ export class LeafletComponent {
       }
     });
   }
+
+
+  defaultMap = {
+    layers: [
+      tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      })
+    ],
+    zoom: 10,
+    center: latLng([10.714586690981509, 106.67381286621094])
+  };
 }

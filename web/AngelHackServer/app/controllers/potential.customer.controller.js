@@ -1,9 +1,8 @@
 const PotentialCustomer = require('../models/potential.customer.model');
 const NewFECustomer = require('../models/new.fe.customer.model');
 
-// Create and Save a new Note
-exports.getuserused = (req, res) => {
-    PotentialCustomer.find({ feCredit: { $exists: true, $ne: [] } }, function (err, customers) {
+exports.getpotentialcustomertier2 = (req, res) => {
+    PotentialCustomer.find({}, function (err, customers) {
         if (err) {
             return res.send(err);
         }
@@ -11,9 +10,17 @@ exports.getuserused = (req, res) => {
 
     });
 };
+// exports.getpotentialcustomertier2 = (req, res) => {
+//     PotentialCustomer.find({ feCredit: { $exists: true, $ne: [] } }, function (err, customers) {
+//         if (err) {
+//             return res.send(err);
+//         }
+//         return res.json(customers);
 
-// Retrieve and return all notes from the database.
-exports.getusermostmatch = (req, res) => {
+//     });
+// };
+
+exports.getpotentialcustomertier1 = (req, res) => {
     var nowByNumber = new Date().getTime();
     NewFECustomer.findOne({ time: { $lt: nowByNumber } }, function (err1, newestCustomer) {
         if (err1) {

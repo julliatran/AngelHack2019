@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import { PotentialCustomerModel } from '../../component/leaflet.map/potential.customer.model';
+import {Http} from '@angular/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,8 +10,16 @@ export class CustomerService {
     console.log('test service');
   }
 
-  getListUserTier1(): PotentialCustomerModel[] {
+  getListUserTier2() {
+    return this.http.get('http://localhost:3000/potentialcustomer/getpotentialcustomertier2');
+    // return [this.userQuy, this.userUyen, this.userKhoa, this.userDuc];
+  }
+  getListUserTIer2Sample() {
     return [this.userQuy, this.userUyen, this.userKhoa, this.userDuc];
+  }
+  getListUserTier1() {
+    return this.http.get('http://localhost:3000/potentialcustomer/getpotentialcustomertier1');
+    // return [this.userQuy, this.userUyen, this.userKhoa, this.userDuc];
   }
   userQuy = {
     "id": "00001",

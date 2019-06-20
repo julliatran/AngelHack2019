@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const dbConfig = require('./config/database.config.js');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 mongoose.Promise = global.Promise;
 
@@ -20,6 +21,7 @@ const app = express();
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json())

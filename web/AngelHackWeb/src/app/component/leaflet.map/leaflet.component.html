@@ -80,8 +80,9 @@
 
     <!-- Map -->
     <div class="col-sm-12 col-md-6 col-lg-8">
-        <div style="height: 600px;" leaflet [leafletOptions]="options" [leafletLayers]="options.layers"
-            [leafletLayersControl]="layersControl">
+        <div  *ngIf="test" style="height: 600px;" leaflet 
+            [leafletOptions]="options" 
+            [leafletMarkerCluster]="markerClusterGroup">
         </div>
     </div>
 </div>
