@@ -1,13 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-// import { MapComponent } from './component/google.map/map.component';
-import { LeafletComponent } from './component/leaflet.map/leaflet.component';
-
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LeafletMarkerClusterModule } from '@asymmetrik/ngx-leaflet-markercluster';
+import { CalculateComponent } from './component/leaflet.map/calculate.component'
 
 import {HttpModule} from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -15,16 +12,14 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     AppComponent,
-    // MapComponent,
-    LeafletComponent
+    CalculateComponent
   ],
   imports: [
     HttpModule,
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    LeafletModule.forRoot(),
-    LeafletMarkerClusterModule
+    FormsModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
