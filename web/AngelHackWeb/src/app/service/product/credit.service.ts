@@ -5,7 +5,7 @@ import { Http } from '@angular/http';
     providedIn: 'root'
 })
 export class CreditService {
-    private percentage = 1.375;
+    private percentage = 1.0375;
     private percentageDown = 0.0010;
     constructor(private http: Http) {
     }
@@ -13,10 +13,10 @@ export class CreditService {
     getCostPerMonth(cost, months) {
         var currentPercentage = this.percentage;
         for(var i = 0; i < months; i++) {
-            this.percentage = this.percentage - this.percentageDown;
-            cost = cost*this.percentage;
+            currentPercentage = currentPercentage - this.percentageDown;
+            cost = cost*currentPercentage;
         }
-        this.percentage = 1.375;
+        this.percentage = 1.0375;
         return cost/months;
     }
 
@@ -53,6 +53,7 @@ export class CreditService {
                     break;
                 }
             }
+            this.percentage = 1.0375;
             if(months > 24 || months <= 0) {
                 return;
             } else {

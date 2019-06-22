@@ -25,9 +25,14 @@ export class CalculateComponent {
   productTypes = this.productService.getProductCategory();
 
   constructor(private changeDetector: ChangeDetectorRef, private productService: ProductService, private creditService: CreditService) {
-
+    this.clearTotalIncomField();
   }
 
+  private clearTotalIncomField() {
+    this.totalIncomAsRange = 0;
+    this.totalIncomeDisplay = '0VND';
+  }
+  
   totalIncomChange(event) {
     if (event.target.value > 0) {
       this.totalIncomeDisplay = event.target.value + '.000.000' + 'VND';
@@ -37,18 +42,29 @@ export class CalculateComponent {
       this.totalIncomeDisplay = event.target.value + 'VND';
       this.totalIncome = 0;
     }
-    this.updateListProduct();
+    this.updateViewByUserAction();
   }
-
+  onChangeFamilyMember(event) {
+    this.updateViewByUserAction();
+  }
   onChangeProductType(event) {
     if ('Smartphone' == event.target.value) {
       this.category = 'Smartphone';
-      // this.productList = this.smartphoneListFromDatabase;
     } else {
       this.category = 'Motorbike';
-      // this.productList = this.motorbikeListFromDatabase;
     }
+    this.updateViewByUserAction();
+  }
+
+  private updateViewByUserAction() {
     this.updateListProduct();
+    this.clearCreditResultOnWeb();
+    this.clearSelectedCSS();
+  }
+
+  private clearCreditResultOnWeb() {
+    this.totalMonth = 0;
+    this.monthlyPayment = 0;
   }
 
   updateListProduct() {
@@ -60,11 +76,11 @@ export class CalculateComponent {
       } else if(this.category == 'Motorbike') {
         productFromDB = this.motorbikeListFromDatabase;
       }
-      productFromDB.forEach(product => {
-        var creditInfo = this.creditService.getCreditInfo(this.totalIncome, this.familyMember, product.Price);
+      productFromDB.forEach(productDB => {
+        var creditInfo = this.creditService.getCreditInfo(this.totalIncome, this.familyMember, productDB.Price);
         console.log(creditInfo);
         if (creditInfo) {
-          this.productList.push(product);
+          this.productList.push(productDB);
         }
       });
     }
@@ -74,11 +90,7 @@ export class CalculateComponent {
   selectProduct(product) {
     this.selectedProduct = product;
     //clear the slected
-    this.productList.forEach(productInList => {
-      var selectedProductAsDocument = (document.querySelector('.' + productInList.Id) as HTMLElement);
-      selectedProductAsDocument.style.borderStyle = '';
-      selectedProductAsDocument.style.borderWidth = '';
-    });
+    this.clearSelectedCSS();
     var selectedProductAsDocument = (document.querySelector('.' + product.Id) as HTMLElement);
     selectedProductAsDocument.style.borderStyle = 'solid';
     selectedProductAsDocument.style.borderWidth = '5px';
@@ -88,5 +100,13 @@ export class CalculateComponent {
       this.monthlyPayment = this.creditService.getCostPerMonth(product.Price, this.totalMonth);
     }
 
+  }
+
+  private clearSelectedCSS() {
+    this.productList.forEach(productInList => {
+      var selectedProductAsDocument = (document.querySelector('.' + productInList.Id) as HTMLElement);
+      selectedProductAsDocument.style.borderStyle = '';
+      selectedProductAsDocument.style.borderWidth = '';
+    });
   }
 }
