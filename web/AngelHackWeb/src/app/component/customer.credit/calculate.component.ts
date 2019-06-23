@@ -76,13 +76,15 @@ export class CalculateComponent {
       } else if(this.category == 'Motorbike') {
         productFromDB = this.motorbikeListFromDatabase;
       }
-      productFromDB.forEach(productDB => {
-        var creditInfo = this.creditService.getCreditInfo(this.totalIncome, this.familyMember, productDB.Price);
-        console.log(creditInfo);
-        if (creditInfo) {
-          this.productList.push(productDB);
-        }
-      });
+      if(productFromDB) {
+        productFromDB.forEach(productDB => {
+          var creditInfo = this.creditService.getCreditInfo(this.totalIncome, this.familyMember, productDB.Price);
+          console.log(creditInfo);
+          if (creditInfo) {
+            this.productList.push(productDB);
+          }
+        });
+      }
     }
 
   }
@@ -105,8 +107,10 @@ export class CalculateComponent {
   private clearSelectedCSS() {
     this.productList.forEach(productInList => {
       var selectedProductAsDocument = (document.querySelector('.' + productInList.Id) as HTMLElement);
-      selectedProductAsDocument.style.borderStyle = '';
-      selectedProductAsDocument.style.borderWidth = '';
+      if(selectedProductAsDocument) {
+        selectedProductAsDocument.style.borderStyle = '';
+        selectedProductAsDocument.style.borderWidth = '';
+      }
     });
   }
 }

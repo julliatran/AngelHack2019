@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalculateComponent } from './component/leaflet.map/calculate.component'
+import { CalculateComponent } from './component/customer.credit/calculate.component'
 
 import {HttpModule} from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
